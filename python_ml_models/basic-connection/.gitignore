@@ -1,5 +1,0 @@
-# Avoids pushing the virtual environment to the GitHub Repository
-py3_basic_connection
-
-# MacOS system files
-.DS_Store
