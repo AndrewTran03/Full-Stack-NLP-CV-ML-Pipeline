@@ -511,6 +511,7 @@ import { RouterLink } from "@angular/router";
             Welcome client-angular-nx-standalone 👋
           </h1>
         </div>
+        <!-- TEST: Link to Card Component Page -->
         <div class="flex justify-center to-blue-600">
           <a routerLink="/card">Go to Card Component</a>
         </div>
