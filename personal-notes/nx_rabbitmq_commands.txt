@@ -1,0 +1,29 @@
+MacOS Installation (via HomeBrew): https://www.rabbitmq.com/docs/install-homebrew
+Windows Installation: https://www.rabbitmq.com/docs/install-windows
+Linux Installation (via Ubuntu/Debian Distros): https://www.rabbitmq.com/docs/install-debian
+
+For MacOS:
+Start a Node in Foreground:
+CONF_ENV_FILE="/opt/homebrew/etc/rabbitmq/rabbitmq-env.conf" /opt/homebrew/opt/rabbitmq/sbin/rabbitmq-server
+
+# highly recommended: enable all feature flags on the running node
+/opt/homebrew/sbin/rabbitmqctl enable_feature_flag all
+
+Starting a Node In the Background:
+# starts a local RabbitMQ node
+brew services start rabbitmq
+
+# highly recommended: enable all feature flags on the running node
+/opt/homebrew/sbin/rabbitmqctl enable_feature_flag all
+
+Enable Web-UI Interface:
+Reference - https://stackoverflow.com/questions/23500014/rabbitmq-started-but-cant-access-management-interface
+rabbitmq-plugins enable rabbitmq_management
+
+- Default Port: 5672
+- Default Username: guest
+- Default Password: guest
+- Default Web UI Port: 15672
+- Web-UI Interface: http://localhost:15672/
+
+Basics of Node.js Implementation Reference (Code): https://youtu.be/_9qc37aoHBQ?si=_IhQBpWoAALXLfTF
