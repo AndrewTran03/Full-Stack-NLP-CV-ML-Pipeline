@@ -52,7 +52,7 @@ router.post("/api/python", async (req, res) => {
       }
     );
 
-    let responseData = "";
+    let parsedResponseData = { prediction: "" };
     // Listen for the response from the Response Queue
     basicPythonChannel.consume(RESPONSE_QUEUE_STR, (message) => {
       const messageCorrelationId = message.properties.correlationId as string;
@@ -60,16 +60,16 @@ router.post("/api/python", async (req, res) => {
         messageCorrelationId,
         correlationId
       });
-      if (
-        message.content.length > 0 &&
-        messageCorrelationId === correlationId
-      ) {
+      if (message.content.length === 0) {
+        throw new Error("Empty Response from Python");
+      }
+      if (messageCorrelationId === correlationId) {
+        const responseData = message.content.toString();
         LOGGER.trace(
           `Python Response Message Content: ${message.content.toString()}`
         );
-        responseData = message.content.toString();
-        // Just for debugging...
-        const parsedResponseData = JSON.parse(responseData) as {
+
+        parsedResponseData = JSON.parse(responseData) as {
           prediction: string;
         };
         const prediction = parsedResponseData.prediction;
