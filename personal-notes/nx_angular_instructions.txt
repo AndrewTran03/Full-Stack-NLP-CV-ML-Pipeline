@@ -1,8 +1,7 @@
 # Create Nx Standalone Angular Project
 npx create-nx-workspace@latest {project-name} --preset=angular-standalone
 
-# Install Tailwind and PostCSS (Not Included by Default)
-
+# Install Tailwind and PostCSS for Styling in Angular (Not Included by Default)
 npm install -D postcss@8.4.38
 touch postcss.config.js
 npx nx g @nx/angular:setup-tailwind <project-name>
