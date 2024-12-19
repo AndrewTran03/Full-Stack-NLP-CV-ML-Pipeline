@@ -4,8 +4,6 @@ from datetime import datetime
 import os
 
 CURRENT_WORKING_DIRECTORY = os.getcwd()
-print(f"Current Working Directory: {CURRENT_WORKING_DIRECTORY}")
-
 LOG_DIR = os.path.join(CURRENT_WORKING_DIRECTORY, "logs")
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)

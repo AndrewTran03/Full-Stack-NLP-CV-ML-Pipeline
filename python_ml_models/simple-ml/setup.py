@@ -26,7 +26,6 @@ def get_requirements(file_path: str) -> List[str]:
     with open(file_path, "r") as file_handle:
         for line in file_handle.readlines():
             requirements.append(line.replace("\n", ""))
-        print("Requirements:", requirements)
         if HYPHEN_E_DOT in requirements:
             requirements.remove(HYPHEN_E_DOT)
 
