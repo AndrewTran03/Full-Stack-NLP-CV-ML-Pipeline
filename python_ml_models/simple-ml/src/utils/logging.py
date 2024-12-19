@@ -1,7 +1,8 @@
 import logging
-from colorlog import ColoredFormatter
-from datetime import datetime
 import os
+from datetime import datetime
+
+from colorlog import ColoredFormatter
 
 CURRENT_WORKING_DIRECTORY = os.getcwd()
 LOG_DIR = os.path.join(CURRENT_WORKING_DIRECTORY, "logs")
@@ -18,10 +19,10 @@ colorlog_formatter = ColoredFormatter(
     "%(log_color)s[%(asctime)s] %(levelname)-8s %(message)s%(reset)s",
     datefmt="%Y-%m-%d %H:%M:%S",
     log_colors={
-        "DEBUG": "cyan",         # Matches Pino's debug color
-        "INFO": "green",         # Matches Pino's default info color
-        "WARNING": "yellow",     # Matches Pino's warning color
-        "ERROR": "red",          # Matches Pino's error color
+        "DEBUG": "cyan",  # Matches Pino's debug color
+        "INFO": "green",  # Matches Pino's default info color
+        "WARNING": "yellow",  # Matches Pino's warning color
+        "ERROR": "red",  # Matches Pino's error color
         "CRITICAL": "bold_red",  # Matches Pino's fatal/critical color
     },
     secondary_log_colors={},
