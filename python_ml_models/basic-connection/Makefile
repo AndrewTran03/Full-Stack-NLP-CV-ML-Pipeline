@@ -1,13 +1,21 @@
+PY3_VENV=py3_basic_connection
 
 all: run
 
 run:
 	python3 basic.py
 
+venv:
+	python3 -m venv ${PY3_VENV}
+
+install:
+	pip3 install -r requirements.txt
+
 format:
 	pip3 install isort black flake8
-	isort *.py
-	black *.py
+	isort *.py src/**/*.py
+	black *.py src/**/*.py
 
 clean:
-	rm -rf py3_basic_connection/
+	rm -rf ${PY3_VENV}/
+	rm -rf *.egg-info/
