@@ -26,5 +26,9 @@ module.exports = {
 
 # END OF COPYING // postcss.config.js
 
+# Install David UI for (Additional) Styling in Angular (Not Included by Default)
+npm install -D david-ui-angular --legacy-peer-deps
+Reference Documentation: https://www.david-ui-angular.com/
+
 # Add a new component (and directory)
 npx nx g @nx/angular:component src/app/{new-component-directory-name}/{new-component-name} --dry-run (Last Argument - Test changes before applying)
