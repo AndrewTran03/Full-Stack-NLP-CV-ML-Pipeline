@@ -1,9 +1,10 @@
 PY3_VENV=py3_basic_connection
+MAIN_PYTHON_SCRIPT_PATH=basic.py
 
 all: run
 
 run:
-	python3 basic.py
+	python3 ${MAIN_PYTHON_SCRIPT_PATH}
 
 venv:
 	python3 -m venv ${PY3_VENV}

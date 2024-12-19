@@ -1,9 +1,10 @@
 PY3_VENV=py3_simple_ml
+MAIN_PYTHON_SCRIPT_PATH=src/scripts/simple_ml.py
 
 all: run
 
 run:
-	python3 src/simple_ml.py
+	python3 ${MAIN_PYTHON_SCRIPT_PATH}
 
 venv:
 	python3 -m venv ${PY3_VENV}
