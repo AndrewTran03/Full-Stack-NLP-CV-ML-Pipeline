@@ -1,0 +1,3 @@
+# Create Nx Standalone React Project
+npx create-nx-workspace@latest {project-name} --preset=react-standalone
+
