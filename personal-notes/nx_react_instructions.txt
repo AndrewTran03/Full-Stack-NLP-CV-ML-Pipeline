@@ -1,3 +1,15 @@
 # Create Nx Standalone React Project
 npx create-nx-workspace@latest {project-name} --preset=react-standalone
 
+# Install Material UI (MUI) for (Additional) Styling in React (Not Included by Default)
+npm install -D @mui/material @emotion/react @emotion/styled --legacy-peer-deps
+
+# Install React Router for Routing in React
+npm install -D react-router react-router-dom
+
+# Install Axios for API Calls in React
+npm install -D axios
+
+# Install SWR for Simpler/Higher-Level Abstractions in Completing API Calls in React
+npm install -D swr
+Reference Documentation: https://swr.vercel.app/docs/advanced/understanding
