@@ -1,2 +1,5 @@
 # Create Nx Standalone Node.js/Express.js Project
 npx create-nx-workspace@latest {project-name} --preset=node-standalone
+
+# Add RabbitMQ (TS - Node.js/Express.js)
+npm install -D amqplib
