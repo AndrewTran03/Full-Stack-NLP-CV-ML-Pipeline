@@ -50,6 +50,7 @@
     "angular-eslint": "^19.0.2",
     "autoprefixer": "^10.4.0",
     "cypress": "^13.13.0",
+    "david-ui-angular": "^1.1.0",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-cypress": "^3.5.0",
