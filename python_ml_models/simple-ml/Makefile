@@ -11,6 +11,7 @@ venv:
 
 install:
 	pip3 install -r requirements.txt
+	python3 -m ipykernel install --user --name ${PY3_VENV} --display-name "ML Project Kernel"
 
 format:
 	pip3 install isort black flake8
