@@ -1,0 +1,2 @@
+Reference Link to Spam vs. Ham Dataset on Kaggle:
+- https://www.kaggle.com/datasets/bagavathypriya/spam-ham-dataset
