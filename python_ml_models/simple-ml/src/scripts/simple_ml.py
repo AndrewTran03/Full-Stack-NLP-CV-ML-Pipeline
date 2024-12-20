@@ -1,6 +1,6 @@
 import pika
 
-from utils.logging import LOGGER
+from src.utils.logging import LOGGER
 
 def main() -> None:
     print("Hello World")
