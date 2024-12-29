@@ -2,6 +2,10 @@ import amqp from "amqplib";
 import LOGGER from "./logger";
 import assert from "assert";
 
+// Default Timeout for RabbitMQ Operations
+const RABBITMQ_TIMEOUT_TIME_SEC = 30;
+export const RABBITMQ_TIMEOUT_TIME_MS = RABBITMQ_TIMEOUT_TIME_SEC * 1000;
+
 export async function startRabbitMQConnection(
   rabbitmq_url: string
 ): Promise<amqp.Connection> {
