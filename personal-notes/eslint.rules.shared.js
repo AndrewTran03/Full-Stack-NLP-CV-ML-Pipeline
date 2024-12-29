@@ -243,7 +243,8 @@ const TYPESCRIPT_ESLINT_CONFIG_RULES = {
   "@typescript-eslint/prefer-ts-expect-error": "error",
   "@typescript-eslint/require-array-sort-compare": "error",
   "require-await": "off",
-  "@typescript-eslint/require-await": "error"
+  "@typescript-eslint/require-await": "error",
+  "@typescript-eslint/no-invalid-void-type": "error"
   // "@typescript-eslint/sort-type-constituents": "error"
 };
 
