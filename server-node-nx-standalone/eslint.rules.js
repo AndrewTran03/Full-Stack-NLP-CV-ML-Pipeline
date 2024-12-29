@@ -4,9 +4,9 @@
  * type ESLintOverrideRuleOptions = {
  *     [key: string]: string | number | boolean | string[];
  * };
- * 
+ *
  * type ConsistentGenericConstructorOverrideRuleOptions = "constructor" | "type-annotation";
- * 
+ *
  * type ConsistentTypeDefinitionsOverrideRuleOptions = "interface" | "type";
  *
  * type ConfigRules = {
@@ -23,7 +23,7 @@
 
 /**
  * JSDoc Representation
- * 
+ *
  * @typedef {{ [key: string]: string | number | boolean | string[] }} ESLintOverrideRuleOptions
  * @typedef {"constructor" | "type-annotation"} ConsistentGenericConstructorOverrideRuleOptions
  * @typedef {"interface" | "type"} ConsistentTypeDefinitionsOverrideRuleOptions
@@ -104,7 +104,7 @@ const STANDARD_ESLINT_CONFIG_RULES = {
   "prefer-exponentiation-operator": "error",
   "prefer-object-has-own": "error",
   "require-yield": "error",
-  "yoda": "error",
+  yoda: "error",
   "no-else-return": [
     "error",
     {
@@ -114,12 +114,13 @@ const STANDARD_ESLINT_CONFIG_RULES = {
   "max-len": [
     "error",
     {
-      code: 80,
+      code: 120,
       tabWidth: 2,
       ignoreComments: true,
       ignoreTrailingComments: true,
       ignoreUrls: true,
       ignoreStrings: true,
+      ignoreTemplateLiterals: true
     }
   ],
   "max-lines": [
@@ -130,34 +131,40 @@ const STANDARD_ESLINT_CONFIG_RULES = {
       skipComments: true
     }
   ],
-  "logical-assignment-operators": ["error", "always", { enforceForIfStatements: true }],
+  "logical-assignment-operators": [
+    "error",
+    "always",
+    { enforceForIfStatements: true }
+  ],
   "no-restricted-syntax": [
-      "error",
-      {
-        selector: "TSEnumDeclaration:not([const=true])",
-        message: "Avoid declaring non-const enums. Use const-types instead."
-      },
-      {
-        selector: "TSEnumDeclaration[const=true]",
-        message: "Avoid declaring const enums. Use const-types instead."
-      },
-      /**
-       * @tutorial [No-Explicit-Void-Return-Type](https://typescript-eslint.io/play/#ts=5.7.2&showAST=es&fileType=.tsx&code=GYVwdgxgLglg9mABAZwIYE8ASMAUBKALkQDc4YATRAbwChFEIFk4AbAUwDoW4BzHAImz88AbhoBfGjUZhkUFBmwAmIvkQBeAHwkyldYjVbqdBk1adufQTGFjJ0pvLRYYAZlV4N20hQ2JQkLAIarT0MszsXLwCQqISUhAsqMjIiACCxvTOyvhEPpSh9Kay5lFWsWL0kvZsAB4ADnAATvKJyakAIqhQqADCcAC2jWBsYPKF4VBNINDNIYj29DxsUGksLF09uTq%2BhWFmkZYxNnFV8Q6y8r1JKUp%2BhTxNbCseXplF4aVH1rYm4gA08SAA&eslintrc=N4KABGBEBOCuA2BTAzpAXGUEKQHYHsBaaFAF2gEsBjUxAE0OQE9dSBDAD3TAG1xsciaNHzRIAGn4CsA7JGSIkNUd0gAxWLhoV8uACKIq8NtDakduMAD4wAFQDKtpgAdEAQVwF253dbv2ANXwKOgBpRCYAd1E6CSlZSABbFGQ2AHNEVTcAN2C6MEQOZ3hqClJ4JjBIynNcNLAAHUhckKawElJYaEsAawjo6HyAChJ6ukMASgA6SHiIAF9JWUw5uQUlUhUMdU1tXQBRIpJkZAs-BydXDy8zM5sHIJDwqJi45Zxkk-TM7Zy8gqKJSoZQqVRqFDqjWaeTaHS6vX6MTAI0Q9UKzmms2Wi1WMmW8kUhk2Ym2Dg0Wh8uEuiHOjhc7k8%2BG8d38jzCiMGb3eSRS3yyLXy6KBIMq1TKEPqTQFsMQnW6YD6L0GyNGYBMIkimNW83iAF1%2BDr5kA&tsconfig=N4KABGBEDGD2C2AHAlgGwKYCcDyiAuysAdgM6QBcYoEEkJemy0eAcgK6qoDCAFutAGsylBm3TgwAXxCSgA&tokens=false)
-       * New Rule: Intended for developers to stop explicitly writing "void" return type explicitly (developed using ESTree ASTs).
-       */
-      {
-        selector: "FunctionDeclaration > TSTypeAnnotation > TSVoidKeyword",
-        message: "[FunctionDeclaration] Avoid explicitly declaring a \"void\" return type."
-      },
-      {
-        selector: "FunctionExpression > TSTypeAnnotation > TSVoidKeyword",
-        message: "[FunctionExpression] Avoid explicitly declaring a \"void\" return type."
-      },
-      {
-        selector: "TSFunctionType > TSTypeAnnotation > TSVoidKeyword",
-        message: "[FunctionType] Avoid explicitly declaring a \"void\" return type."
-      }
-    ],
+    "error",
+    {
+      selector: "TSEnumDeclaration:not([const=true])",
+      message: "Avoid declaring non-const enums. Use const-types instead."
+    },
+    {
+      selector: "TSEnumDeclaration[const=true]",
+      message: "Avoid declaring const enums. Use const-types instead."
+    },
+    /**
+     * @tutorial [No-Explicit-Void-Return-Type](https://typescript-eslint.io/play/#ts=5.7.2&showAST=es&fileType=.tsx&code=GYVwdgxgLglg9mABAZwIYE8ASMAUBKALkQDc4YATRAbwChFEIFk4AbAUwDoW4BzHAImz88AbhoBfGjUZhkUFBmwAmIvkQBeAHwkyldYjVbqdBk1adufQTGFjJ0pvLRYYAZlV4N20hQ2JQkLAIarT0MszsXLwCQqISUhAsqMjIiACCxvTOyvhEPpSh9Kay5lFWsWL0kvZsAB4ADnAATvKJyakAIqhQqADCcAC2jWBsYPKF4VBNINDNIYj29DxsUGksLF09uTq%2BhWFmkZYxNnFV8Q6y8r1JKUp%2BhTxNbCseXplF4aVH1rYm4gA08SAA&eslintrc=N4KABGBEBOCuA2BTAzpAXGUEKQHYHsBaaFAF2gEsBjUxAE0OQE9dSBDAD3TAG1xsciaNHzRIAGn4CsA7JGSIkNUd0gAxWLhoV8uACKIq8NtDakduMAD4wAFQDKtpgAdEAQVwF253dbv2ANXwKOgBpRCYAd1E6CSlZSABbFGQ2AHNEVTcAN2C6MEQOZ3hqClJ4JjBIynNcNLAAHUhckKawElJYaEsAawjo6HyAChJ6ukMASgA6SHiIAF9JWUw5uQUlUhUMdU1tXQBRIpJkZAs-BydXDy8zM5sHIJDwqJi45Zxkk-TM7Zy8gqKJSoZQqVRqFDqjWaeTaHS6vX6MTAI0Q9UKzmms2Wi1WMmW8kUhk2Ym2Dg0Wh8uEuiHOjhc7k8%2BG8d38jzCiMGb3eSRS3yyLXy6KBIMq1TKEPqTQFsMQnW6YD6L0GyNGYBMIkimNW83iAF1%2BDr5kA&tsconfig=N4KABGBEDGD2C2AHAlgGwKYCcDyiAuysAdgM6QBcYoEEkJemy0eAcgK6qoDCAFutAGsylBm3TgwAXxCSgA&tokens=false)
+     * New Rule: Intended for developers to stop explicitly writing "void" return type explicitly (developed using ESTree ASTs).
+     */
+    {
+      selector: "FunctionDeclaration > TSTypeAnnotation > TSVoidKeyword",
+      message:
+        '[FunctionDeclaration] Avoid explicitly declaring a "void" return type.'
+    },
+    {
+      selector: "FunctionExpression > TSTypeAnnotation > TSVoidKeyword",
+      message:
+        '[FunctionExpression] Avoid explicitly declaring a "void" return type.'
+    },
+    {
+      selector: "TSFunctionType > TSTypeAnnotation > TSVoidKeyword",
+      message: '[FunctionType] Avoid explicitly declaring a "void" return type.'
+    }
+  ]
 };
 
 /**
@@ -171,15 +178,18 @@ const TYPESCRIPT_ESLINT_CONFIG_RULES = {
   //   allowExpressions: true,
   //   allowTypedFunctionExpressions: true
   // }],
-  
+
   "@typescript-eslint/no-explicit-any": "error",
   "@typescript-eslint/no-unused-vars": "error",
   "@typescript-eslint/prefer-readonly": "error",
   "@typescript-eslint/array-type": "error",
   "@typescript-eslint/ban-tslint-comment": "error",
-  "@typescript-eslint/consistent-generic-constructors": ["error", "constructor"],
+  "@typescript-eslint/consistent-generic-constructors": [
+    "error",
+    "constructor"
+  ],
   "consistent-return": "off",
-  "@typescript-eslint/consistent-return": "error",
+  // "@typescript-eslint/consistent-return": "error",
   "@typescript-eslint/consistent-type-definitions": ["error", "type"],
   "default-param-last": "off",
   "@typescript-eslint/default-param-last": "error",
@@ -233,8 +243,8 @@ const TYPESCRIPT_ESLINT_CONFIG_RULES = {
   "@typescript-eslint/prefer-ts-expect-error": "error",
   "@typescript-eslint/require-array-sort-compare": "error",
   "require-await": "off",
-  "@typescript-eslint/require-await": "error",
-  "@typescript-eslint/sort-type-constituents": "error",
+  "@typescript-eslint/require-await": "error"
+  // "@typescript-eslint/sort-type-constituents": "error"
 };
 
 /**
