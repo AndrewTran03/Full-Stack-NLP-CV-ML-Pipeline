@@ -2,6 +2,7 @@ import express from "express";
 import { HTTP_STATUS_CODE, onErrorMsg, onSuccessMsg } from "./utils";
 import LOGGER from "../utils/logger";
 import {
+  RABBITMQ_TIMEOUT_TIME_MS,
   checkChannelQueuesStatus,
   createRabbitMQReqResChannel
 } from "../utils/rabbitmq";
@@ -36,7 +37,7 @@ router.post("/api/python", async (req, res) => {
 
   try {
     const basicPythonChannel = await createRabbitMQReqResChannel(
-      RABBITMQ_CONNECTION,
+      RABBITMQ_CONNECTION!,
       channelPrefix
     );
     await checkChannelQueuesStatus(basicPythonChannel, channelPrefix);
@@ -52,45 +53,74 @@ router.post("/api/python", async (req, res) => {
       }
     );
 
-    let parsedResponseData = { prediction: "" };
     // Listen for the response from the Response Queue
-    basicPythonChannel.consume(RESPONSE_QUEUE_STR, (message) => {
-      const messageCorrelationId = message.properties.correlationId as string;
-      LOGGER.trace({
-        messageCorrelationId,
-        correlationId
-      });
-      if (message.content.length === 0) {
-        throw new Error("Empty Response from Python");
-      }
-      if (messageCorrelationId === correlationId) {
-        const responseData = message.content.toString();
-        LOGGER.trace(
-          `Python Response Message Content: ${message.content.toString()}`
+    const response = await new Promise<string>((resolve, reject) => {
+      // Fallback for too long of a response time
+      const timeout = setTimeout(() => {
+        LOGGER.error(
+          `Timeout: No response received for correlationId: ${correlationId}`
         );
-
-        parsedResponseData = JSON.parse(responseData) as {
-          prediction: string;
-        };
-        const prediction = parsedResponseData.prediction;
-        LOGGER.debug(`Parsed Prediction Response: ${prediction}`);
-
-        // Acknowledge the message to RabbitMQ
-        basicPythonChannel.ack(message);
-
-        // Close the channel to avoid leak in abstraction (avoid listening for the different/"wrong" response messages)
         basicPythonChannel.close();
+        throw new Error("Timeout: No response received from Python");
+      }, RABBITMQ_TIMEOUT_TIME_MS);
 
-        return res
-          .status(HTTP_STATUS_CODE.OK)
-          .json(JSON.stringify(parsedResponseData));
-      }
+      basicPythonChannel.consume(
+        RESPONSE_QUEUE_STR,
+        (message) => {
+          if (message == null) {
+            clearTimeout(timeout);
+            basicPythonChannel.close();
+            reject(new Error("Invalid Response from Python"));
+            return;
+          }
+          const messageCorrelationId = message.properties
+            .correlationId as string;
+          LOGGER.trace({
+            messageCorrelationId,
+            correlationId
+          });
+
+          if (message.content.length === 0) {
+            clearTimeout(timeout);
+            basicPythonChannel.close();
+            reject(new Error("Empty Response from Python"));
+            return;
+          }
+
+          if (messageCorrelationId === correlationId) {
+            const responseData = message.content.toString();
+            LOGGER.trace(
+              `Python Response Message Content: ${message.content.toString()}`
+            );
+
+            clearTimeout(timeout);
+            // Acknowledge the message from RabbitMQ
+            basicPythonChannel.ack(message);
+
+            resolve(responseData);
+          }
+        },
+        { noAck: false } // Ensure manual acknowledgment
+      );
     });
-  } catch (err) {
+
+    const parsedResponseData = JSON.parse(response) as {
+      prediction: string;
+    };
+    const prediction = parsedResponseData.prediction;
+    LOGGER.debug(`Parsed Prediction Response: ${prediction}`);
+
+    // Close the channel to avoid leak in abstraction (avoid listening for the different/"wrong" response messages)
+    basicPythonChannel.close();
+
+    return res
+      .status(HTTP_STATUS_CODE.OK)
+      .json(onSuccessMsg(parsedResponseData));
+  } catch (err: unknown) {
     LOGGER.error(`Error Handling Python Request: ${err}`);
     return res
       .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
-      .json(onErrorMsg(new Error(err)));
+      .json(onErrorMsg(err as string));
   }
 });
 
