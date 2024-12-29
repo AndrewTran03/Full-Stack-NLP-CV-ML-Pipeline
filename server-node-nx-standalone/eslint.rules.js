@@ -132,7 +132,7 @@ const STANDARD_ESLINT_CONFIG_RULES = {
         message: "[FunctionDeclaration] Avoid explicitly declaring a \"void\" return type."
       },
       {
-        selector: 'FunctionExpression > TSTypeAnnotation > TSVoidKeyword',
+        selector: "FunctionExpression > TSTypeAnnotation > TSVoidKeyword",
         message: "[FunctionExpression] Avoid explicitly declaring a \"void\" return type."
       },
       {
