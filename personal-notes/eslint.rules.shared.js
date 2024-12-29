@@ -136,8 +136,8 @@ const STANDARD_ESLINT_CONFIG_RULES = {
         message: "[FunctionExpression] Avoid explicitly declaring a \"void\" return type."
       },
       {
-        selector: "ArrowFunctionExpression > TSTypeAnnotation > TSVoidKeyword",
-        message: "[ArrowFunctionExpression] Avoid explicitly declaring a \"void\" return type."
+        selector: "TSFunctionType > TSTypeAnnotation > TSVoidKeyword",
+        message: "[FunctionType] Avoid explicitly declaring a \"void\" return type."
       }
     ],
 };
