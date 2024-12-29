@@ -21,3 +21,4 @@ format:
 clean:
 	rm -rf ${PY3_VENV}/
 	rm -rf *.egg-info/
+	find src/ -type d -name "__pycache__" -exec rm -rf {} +
