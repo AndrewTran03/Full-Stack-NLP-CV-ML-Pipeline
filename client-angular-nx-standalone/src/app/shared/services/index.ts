@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { BACKEND_URL_BASE } from "../utils";
 import { Observable } from "rxjs";
 
-type APIResponse<T> = T extends Array<infer U> ? { response: Partial<U>[] } : { response: Partial<T> };
+type APIResponse<T> = T extends (infer U)[] ? { response: Partial<U>[] } : { response: Partial<T> };
 
 @Injectable({
   providedIn: "root"
