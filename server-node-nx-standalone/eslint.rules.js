@@ -209,6 +209,7 @@ const TYPESCRIPT_ESLINT_CONFIG_RULES = {
   "@typescript-eslint/no-misused-new": "error",
   "@typescript-eslint/no-mixed-enums": "error",
   "@typescript-eslint/no-namespace": "error",
+  "@typescript-eslint/no-non-null-assertion": "off",
   "@typescript-eslint/no-non-null-asserted-nullish-coalescing": "error",
   "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
   "no-redeclare": "off",

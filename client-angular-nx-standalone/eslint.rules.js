@@ -131,11 +131,7 @@ const STANDARD_ESLINT_CONFIG_RULES = {
       skipComments: true
     }
   ],
-  "logical-assignment-operators": [
-    "error",
-    "always",
-    { enforceForIfStatements: true }
-  ],
+  "logical-assignment-operators": ["error", "always", { enforceForIfStatements: true }],
   "no-restricted-syntax": [
     "error",
     {
@@ -152,13 +148,11 @@ const STANDARD_ESLINT_CONFIG_RULES = {
      */
     {
       selector: "FunctionDeclaration > TSTypeAnnotation > TSVoidKeyword",
-      message:
-        '[FunctionDeclaration] Avoid explicitly declaring a "void" return type.'
+      message: '[FunctionDeclaration] Avoid explicitly declaring a "void" return type.'
     },
     {
       selector: "FunctionExpression > TSTypeAnnotation > TSVoidKeyword",
-      message:
-        '[FunctionExpression] Avoid explicitly declaring a "void" return type.'
+      message: '[FunctionExpression] Avoid explicitly declaring a "void" return type.'
     },
     {
       selector: "TSFunctionType > TSTypeAnnotation > TSVoidKeyword",
@@ -184,10 +178,7 @@ const TYPESCRIPT_ESLINT_CONFIG_RULES = {
   "@typescript-eslint/prefer-readonly": "error",
   "@typescript-eslint/array-type": "error",
   "@typescript-eslint/ban-tslint-comment": "error",
-  "@typescript-eslint/consistent-generic-constructors": [
-    "error",
-    "constructor"
-  ],
+  "@typescript-eslint/consistent-generic-constructors": ["error", "constructor"],
   "consistent-return": "off",
   // "@typescript-eslint/consistent-return": "error",
   "@typescript-eslint/consistent-type-definitions": ["error", "type"],
@@ -209,6 +200,7 @@ const TYPESCRIPT_ESLINT_CONFIG_RULES = {
   "@typescript-eslint/no-misused-new": "error",
   "@typescript-eslint/no-mixed-enums": "error",
   "@typescript-eslint/no-namespace": "error",
+  "@typescript-eslint/no-non-null-assertion": "off",
   "@typescript-eslint/no-non-null-asserted-nullish-coalescing": "error",
   "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
   "no-redeclare": "off",
