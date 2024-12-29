@@ -4,13 +4,13 @@
     <p>Input: {{ input }}</p>
   }
   <p *ngIf="input.length > 0">Input: {{ input }}</p>
-  <button class="" (click)="btnClick()">(Click) to Interact with Python BE</button>
-  <!-- @if (card().text.length > 0) {
-    <h1>ID: {{ card().id }}</h2>
-    <h2>Text: {{ card().text }}</h1>
+  <button (click)="btnClick()">(Click) to Interact with Python BE</button>
+  @if (card().text.length > 0) {
+    <h1>ID: {{ card().id }}</h1>
+    <h2>Text: {{ card().text }}</h2>
   } @else {
     <p>No card available</p>
-  } -->
+  }
   @if (predict().prediction.length > 0) {
     <p>Python Back-End Message: {{ predict().prediction }}</p>
   } @else {
