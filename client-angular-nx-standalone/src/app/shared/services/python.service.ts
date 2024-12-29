@@ -1,28 +1,28 @@
-import { BACKEND_URL_BASE } from "../utils";
-import { HttpClient } from "@angular/common/http";
 import { map, Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { PythonBE } from "../models/python.model";
 import { Injectable } from "@angular/core";
+import { APIService } from ".";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root"
 })
 export class PythonService {
-  constructor(private readonly httpClient: HttpClient) {}
+  constructor(private readonly apiService: APIService) {}
 
   connectToPythonBackendHTTPClient(): Observable<PythonBE> {
-    return this.httpClient.post<string>(`${BACKEND_URL_BASE}/api/python`, { message: "Python" }).pipe(
-      map((response) => {
-        console.log(`Response:`, response); // Logs the response string
-        console.log(typeof response);
-        const parsedResponse = JSON.parse(response) as PythonBE; // Parse the response string
-        console.log(`Response:`, parsedResponse); // Logs the parsed response object
-        return parsedResponse; // Return the response object directly
+    return this.apiService.post<PythonBE>(`api/python`, { message: "Python" }).pipe(
+      map((res) => {
+        console.log(res);
+        return res.response;
       }),
-      catchError((error) => {
-        console.error("Error fetching data:", error);
-        throw error;
+      map((res) => PythonBE.asPythonBE(res)),
+      catchError((errMsg) => {
+        const err = errMsg as HttpErrorResponse as { error: { message: string } };
+        console.error("ERROR MSG -", err.error.message);
+        alert(err.error.message);
+        throw err;
       })
     );
   }

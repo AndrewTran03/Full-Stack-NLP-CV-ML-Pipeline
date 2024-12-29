@@ -8,5 +8,9 @@ export const appRoutes: Route[] = [
   {
     path: "card",
     loadComponent: () => import("./components/card/card.component").then((m) => m.CardComponent)
+  },
+  {
+    path: "data",
+    loadComponent: () => import("./components/data/data.component").then((m) => m.DataComponent)
   }
 ];

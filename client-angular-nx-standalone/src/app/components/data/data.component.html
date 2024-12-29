@@ -1,0 +1,20 @@
+<p>Data works!</p>
+<button (click)="getAllData()">Get All Data</button>
+<br />
+<button (click)="getQueriedData()">Get Data (Queried)</button>
+<br />
+<button (click)="getDataError()">Test Error Handling</button>
+<br />
+<button (click)="clearDataArrLocally()">Clear Data</button>
+<br />
+<button (click)="getSpecifiedData()">Get First Specific User Data</button>
+<br />
+<button (click)="getSimpleMLRequestData()">Get ML-Request Data</button>
+<br />
+<ng-container *ngIf="dataArr().length > 0">
+  @for (data of dataArr(); track data) {
+    <h1>{{ data.name }}</h1>
+    <p>{{ data.age }}</p>
+    <p>{{ getTime(data.createdAt) }}</p>
+  }
+</ng-container>

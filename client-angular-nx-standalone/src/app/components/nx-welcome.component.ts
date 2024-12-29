@@ -515,6 +515,10 @@ import { RouterLink } from "@angular/router";
         <div class="flex justify-center to-blue-600">
           <a routerLink="/card">Go to Card Component</a>
         </div>
+        <!-- TEST: Link to Data Component Page -->
+        <div class="flex justify-center to-blue-600">
+          <a routerLink="/data">Go to Data Component</a>
+        </div>
         <!--  HERO  -->
         <div id="hero" class="rounded">
           <div class="text-container">

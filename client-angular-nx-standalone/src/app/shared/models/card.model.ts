@@ -1,9 +1,17 @@
-export type Card = {
-  id: number;
-  text: string;
-};
+export class Card {
+  id = 0;
+  text = "";
 
-export const DEFAULT_CARD: Card = {
-  id: 0,
-  text: "DEFAULT-TEXT"
-};
+  static asCard(content: Partial<Card>): Card {
+    const card: Card = Object.assign(new Card(), content);
+    return card;
+  }
+
+  static asCards(jsonArray: Partial<Card>[]): Card[] {
+    return jsonArray.map((cardUnmapped) => Card.asCard(cardUnmapped));
+  }
+
+  json(): string {
+    return JSON.stringify(this);
+  }
+}

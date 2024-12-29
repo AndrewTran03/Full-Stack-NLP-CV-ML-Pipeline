@@ -1,5 +1,4 @@
-import { Card, DEFAULT_CARD } from "../models/card.model";
-import { HttpClient } from "@angular/common/http";
+import { Card } from "../models/card.model";
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
 
@@ -7,13 +6,10 @@ import { Observable, of } from "rxjs";
   providedIn: "root"
 })
 export class CardService {
-  constructor(private readonly httpClient: HttpClient) {}
-
   getFilledCard(): Observable<Card> {
-    const c: Card = {
-      ...DEFAULT_CARD,
-      id: 1
-    };
+    const c: Card = new Card();
+    c.text = "Filled Card Text";
+    c.id = 1;
     return of(c);
   }
 }
