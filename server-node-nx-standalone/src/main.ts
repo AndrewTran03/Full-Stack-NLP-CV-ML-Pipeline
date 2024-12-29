@@ -7,10 +7,9 @@ import amqp from "amqplib";
 import APP_ROUTER from "./routes";
 import LOGGER from "./utils/logger";
 import { startRabbitMQConnection } from "./utils/rabbitmq";
-import assert from "assert";
 
-const BACKEND_HOST = process.env.HOST ?? "localhost";
-const BACKEND_PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
+const BACKEND_HOST = process.env["HOST"] ?? "localhost";
+const BACKEND_PORT = process.env["PORT"] ? Number(process.env["PORT"]) : 3000;
 
 const app = express();
 app.use(bodyParser.json({ limit: "1mb" }));
@@ -42,12 +41,18 @@ server.listen(BACKEND_PORT, BACKEND_HOST, async () => {
   LOGGER.info(`Server is running on "http://${BACKEND_HOST}:${BACKEND_PORT}"`);
   const createdConnection = await startRabbitMQConnection(RABBITMQ_URL);
   connection = createdConnection;
-  assert(connection != null, "Connection not created properly");
 });
 server.on("error", shutdown);
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);
 
-function shutdown(): void {
+function shutdown() {
+  LOGGER.warn("Shutting down server...");
   connection?.close();
+  server.close(() => {
+    LOGGER.warn("Server closed. Exiting process...");
+    process.exit(0);
+  });
 }
 
 export { connection as RABBITMQ_CONNECTION };
