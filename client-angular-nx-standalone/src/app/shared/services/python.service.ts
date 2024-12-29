@@ -1,8 +1,9 @@
-import { Injectable } from "@angular/core";
 import { BACKEND_URL_BASE } from "../utils";
 import { HttpClient } from "@angular/common/http";
-import { catchError, map, Observable } from "rxjs";
+import { map, Observable } from "rxjs";
+import { catchError } from "rxjs/operators";
 import { PythonBE } from "../models/python.model";
+import { Injectable } from "@angular/core";
 
 @Injectable({
   providedIn: "root"
