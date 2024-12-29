@@ -116,6 +116,10 @@ const STANDARD_ESLINT_CONFIG_RULES = {
     {
       code: 80,
       tabWidth: 2,
+      ignoreComments: true,
+      ignoreTrailingComments: true,
+      ignoreUrls: true,
+      ignoreStrings: true,
     }
   ],
   "max-lines": [
