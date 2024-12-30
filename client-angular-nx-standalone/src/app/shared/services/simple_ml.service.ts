@@ -11,7 +11,7 @@ export class SimpleMLService {
   constructor(private readonly apiService: APIService) {}
 
   getSimpleMLRequest(): Observable<SimpleML> {
-    return this.apiService.post<SimpleML>("/api/simple-ml", { message: "Testing ML..." }).pipe(
+    return this.apiService.post<SimpleML>("api/simple-ml", { message: "This is not a spam email" }).pipe(
       map((res) => {
         console.log(res);
         return res.response;
