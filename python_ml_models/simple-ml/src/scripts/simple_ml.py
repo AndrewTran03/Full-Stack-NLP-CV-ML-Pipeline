@@ -1,3 +1,4 @@
+import json
 import os
 import pickle
 import time
@@ -8,6 +9,8 @@ import contractions
 import nltk
 import numpy as np
 import pika
+import pika.adapters.blocking_connection
+import pika.spec
 import spacy_universal_sentence_encoder
 from nltk import pos_tag
 from nltk.corpus import stopwords
@@ -21,6 +24,7 @@ from src.utils.logging import LOGGER
 # CONSTANTS
 @dataclass
 class CONSTANTS(NamedTuple):
+    RABBITMQ_URL = "amqp://guest:guest@localhost:5672/"
     ML_MODEL_FALLBACK_TOKEN_RESULT = "<NO-RESULT>"
     ML_MODEL_PATH = "src/models/dt_classifier_model.pkl"
     LABEL_ENCODER_PATH = "src/models/classification_label_encoder_mapping_results.pkl"
@@ -132,6 +136,10 @@ def print_minute_string_helper(time_taken: float) -> str:
     )
 
 
+# Keeps track of the number of requests
+num_request = 0
+
+
 def predict(email_body_contents: str) -> PredictionDict:
     start_time = time.time()
     if not os.path.exists(CONSTANTS.ML_MODEL_PATH) or not os.path.exists(
@@ -176,18 +184,67 @@ def predict(email_body_contents: str) -> PredictionDict:
         return {"prediction": result}
 
 
-def main() -> None:
-    print("Hello World")
+def main(
+    rabbitmq_url: str = CONSTANTS.RABBITMQ_URL, queue_prefix: str = "simple_ml"
+) -> None:
+    print("Testing Logging Capabilities")
 
     # Test logging capabilities
-    LOGGER.info("Hello World")
-    LOGGER.debug("Hello World")
-    LOGGER.warning("Hello World")
-    LOGGER.error("Hello World")
-    LOGGER.critical("Hello World")
+    LOGGER.info("Hello World - LOGGING (INFO)")
+    LOGGER.debug("Hello World - LOGGING (DEBUG)")
+    LOGGER.warning("Hello World - LOGGING (WARNING)")
+    LOGGER.error("Hello World - LOGGING (ERROR)")
+    LOGGER.critical("Hello World - LOGGING (CRITICAL)")
 
-    # Test ML model (Printing the result - for now)
-    print(predict("This is not a spam email"))
+    # Connect to RabbitMQ
+    predict_connection = pika.BlockingConnection(pika.URLParameters(rabbitmq_url))
+    channel = predict_connection.channel()
+
+    REQUEST_QUEUE = f"{queue_prefix}_request_queue"
+    RESPONSE_QUEUE = f"{queue_prefix}_response_queue"
+
+    active_queues: List[str] = [REQUEST_QUEUE, RESPONSE_QUEUE]
+    # Ensure that the queues exist (or are created)
+    for queue_name in active_queues:
+        channel.queue_declare(queue=queue_name, durable=True)
+
+    def on_queue_request_received(
+        channel: pika.adapters.blocking_connection.BlockingChannel,
+        method: pika.spec.Basic.Deliver,
+        properties: pika.BasicProperties,
+        body: bytes,
+    ) -> None:
+        global num_request
+
+        # Parse the incoming request
+        request_data: str = json.loads(body)
+        LOGGER.debug(f" [{num_request}] Received Request Number: {properties.correlation_id}")
+        LOGGER.debug(f" [{num_request}] Received Request Message: {request_data}")
+
+        # Perform the prediction
+        response_data = predict(email_body_contents=request_data)
+        LOGGER.debug(f" [{num_request}] Sending Response Number: {properties.correlation_id}")
+        LOGGER.debug(f" [{num_request}] Sending Response Message: {response_data}")
+        
+        num_request += 1
+
+        # Send the response to the Response Queue
+        channel.basic_publish(
+            exchange="",
+            routing_key=properties.reply_to,
+            body=json.dumps(response_data),
+            properties=pika.BasicProperties(correlation_id=properties.correlation_id),
+        )
+
+        # Acknowledge the request
+        channel.basic_ack(delivery_tag=method.delivery_tag)
+        return None
+
+    # Start consuming from the Request Queue
+    channel.basic_consume(
+        queue=REQUEST_QUEUE, on_message_callback=on_queue_request_received
+    )
+    channel.start_consuming()
 
     return None
 
