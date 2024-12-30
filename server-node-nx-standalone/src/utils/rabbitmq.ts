@@ -73,3 +73,25 @@ export async function checkChannelQueuesStatus(
     LOGGER.debug(`Details: ${JSON.stringify(queueInfo)}`);
   }
 }
+
+function generateRandomInt(min = 0, max = 1_000_000): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export function generateCorrelationIDRabbitMQ(counter: number) {
+  return `${Date.now()}_${generateRandomInt()}_${counter}`;
+}
+
+type RabbitMQQueueStrings = {
+  REQUEST_QUEUE_STR: string;
+  RESPONSE_QUEUE_STR: string;
+};
+
+export function generateReqAndResQueueStrings(
+  channelPrefix: string
+): RabbitMQQueueStrings {
+  return {
+    REQUEST_QUEUE_STR: `${channelPrefix}_request_queue` as const,
+    RESPONSE_QUEUE_STR: `${channelPrefix}_response_queue` as const
+  };
+}

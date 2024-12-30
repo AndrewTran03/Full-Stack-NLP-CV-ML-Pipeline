@@ -4,19 +4,17 @@ import LOGGER from "../utils/logger";
 import {
   RABBITMQ_TIMEOUT_TIME_MS,
   checkChannelQueuesStatus,
-  createRabbitMQReqResChannel
+  createRabbitMQReqResChannel,
+  generateCorrelationIDRabbitMQ,
+  generateReqAndResQueueStrings
 } from "../utils/rabbitmq";
 import { RABBITMQ_CONNECTION } from "../main";
 
 const CHANNEL_PREFIX = "python" as const;
-const REQUEST_QUEUE_STR = `${CHANNEL_PREFIX}_request_queue` as const;
-const RESPONSE_QUEUE_STR = `${CHANNEL_PREFIX}_response_queue` as const;
+const { REQUEST_QUEUE_STR, RESPONSE_QUEUE_STR } =
+  generateReqAndResQueueStrings(CHANNEL_PREFIX);
 
 const router = express.Router();
-
-function generateRandomInt(min = 0, max = 1_000_000): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 // FOR TESTING:
 router.get("/api/success", (_, res) => {
@@ -31,7 +29,7 @@ router.post("/api/python", async (req, res) => {
 
   LOGGER.trace(`Previous: ${counter}`);
   // Generate a unique correlation ID for this request
-  const correlationId = `${Date.now()}_${generateRandomInt()}_${counter}`;
+  const correlationId = generateCorrelationIDRabbitMQ(counter);
   LOGGER.info(`Python Request ID: ${correlationId}`);
   counter++;
   LOGGER.trace(`Current: ${counter}`);
