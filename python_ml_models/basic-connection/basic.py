@@ -41,12 +41,13 @@ def main(rabbitmq_url: str, prefix: str = "python") -> None:
         request_data = json.loads(body)
         print(f" [{num_request}] Received Request Number: {properties.correlation_id}")
         print(f" [{num_request}] Received Request Message: {request_data}")
-        num_request += 1
 
         # Perform the prediction
         response_data = predict(number=num_request)
         print(f" [{num_request}] Sending Response Number: {properties.correlation_id}")
         print(f" [{num_request}] Sending Response Message: {response_data}")
+        
+        num_request += 1
 
         # Send the response to the Response Queue
         channel.basic_publish(
