@@ -12,7 +12,7 @@ export class PythonService {
   constructor(private readonly apiService: APIService) {}
 
   connectToPythonBackendHTTPClient(): Observable<PythonBE> {
-    return this.apiService.post<PythonBE>(`api/python`, { message: "Python" }).pipe(
+    return this.apiService.post<PythonBE>("api/python", { message: "Python" }).pipe(
       map((res) => {
         console.log(res);
         return res.response;
