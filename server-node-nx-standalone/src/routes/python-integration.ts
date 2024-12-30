@@ -8,9 +8,10 @@ import {
 } from "../utils/rabbitmq";
 import { RABBITMQ_CONNECTION } from "../main";
 
-const channelPrefix = "python" as const;
-const REQUEST_QUEUE_STR = `${channelPrefix}_request_queue` as const;
-const RESPONSE_QUEUE_STR = `${channelPrefix}_response_queue` as const;
+const CHANNEL_PREFIX = "python" as const;
+const REQUEST_QUEUE_STR = `${CHANNEL_PREFIX}_request_queue` as const;
+const RESPONSE_QUEUE_STR = `${CHANNEL_PREFIX}_response_queue` as const;
+
 const router = express.Router();
 
 function generateRandomInt(min = 0, max = 1_000_000): number {
@@ -38,9 +39,9 @@ router.post("/api/python", async (req, res) => {
   try {
     const basicPythonChannel = await createRabbitMQReqResChannel(
       RABBITMQ_CONNECTION!,
-      channelPrefix
+      CHANNEL_PREFIX
     );
-    await checkChannelQueuesStatus(basicPythonChannel, channelPrefix);
+    await checkChannelQueuesStatus(basicPythonChannel, CHANNEL_PREFIX);
 
     LOGGER.trace(`ID (Before Send): ${correlationId}`);
     // Send the request to the Request Queue
