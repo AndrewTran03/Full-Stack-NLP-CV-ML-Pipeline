@@ -1,8 +1,8 @@
 const nx = require('@nx/eslint-plugin');
-const eslintPluginUnicorn = require("eslint-plugin-unicorn");
-const globals = require("globals");
-const tseslint = require("typescript-eslint");
-const ESLINT_RULES = require("./eslint.rules");
+const eslintPluginUnicorn = require('eslint-plugin-unicorn');
+const globals = require('globals');
+const tseslint = require('typescript-eslint');
+const ESLINT_RULES = require('@andrewt03/eslint-typescript-rules');
 
 module.exports = [
   ...nx.configs['flat/base'],
@@ -18,18 +18,18 @@ module.exports = [
   },
   ...nx.configs['flat/react'],
   {
-    files: ["src/**/*.ts", "src/**/*.tsx"],
+    files: ['src/**/*.ts', 'src/**/*.tsx'],
     languageOptions: {
       globals: globals.builtin,
       parser: tseslint.parser,
       parserOptions: {
         projectService: true,
-        tsconfigRootDir: __dirname
-      }
+        tsconfigRootDir: __dirname,
+      },
     },
     plugins: {
       unicorn: eslintPluginUnicorn,
-      "@typescript-eslint": tseslint.plugin
+      '@typescript-eslint': tseslint.plugin,
     },
     rules: {
       // Standard ESLint Rules
@@ -39,7 +39,7 @@ module.exports = [
       ...ESLINT_RULES.TYPESCRIPT_ESLINT_CONFIG_RULES,
 
       // Unicorn ESLint Rules
-      ...ESLINT_RULES.UNICORN_ESLINT_CONFIG_RULES
-    }
-  }
+      ...ESLINT_RULES.UNICORN_ESLINT_CONFIG_RULES,
+    },
+  },
 ];

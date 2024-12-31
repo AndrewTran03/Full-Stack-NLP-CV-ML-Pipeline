@@ -2,7 +2,7 @@ const nx = require("@nx/eslint-plugin");
 const eslintPluginUnicorn = require("eslint-plugin-unicorn");
 const globals = require("globals");
 const tseslint = require("typescript-eslint");
-const ESLINT_RULES = require("./eslint.rules");
+const ESLINT_RULES = require("@andrewt03/eslint-typescript-rules");
 
 module.exports = [
   ...nx.configs["flat/base"],

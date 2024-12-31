@@ -2,7 +2,7 @@ const nx = require("@nx/eslint-plugin");
 const eslintPluginUnicorn = require("eslint-plugin-unicorn");
 const globals = require("globals");
 const tseslint = require("typescript-eslint");
-const ESLINT_RULES = require("./eslint.rules");
+const ESLINT_RULES = require("@andrewt03/eslint-typescript-rules");
 
 module.exports = [
   ...nx.configs["flat/base"],
@@ -33,14 +33,15 @@ module.exports = [
     rules: {
       // Standard ESLint Rules
       ...ESLINT_RULES.STANDARD_ESLINT_CONFIG_RULES,
-      "no-console": "error",
-      "no-debugger": "error",
 
       // TypeScript ESLint Rules
       ...ESLINT_RULES.TYPESCRIPT_ESLINT_CONFIG_RULES,
 
       // Unicorn ESLint Rules
-      ...ESLINT_RULES.UNICORN_ESLINT_CONFIG_RULES
+      ...ESLINT_RULES.UNICORN_ESLINT_CONFIG_RULES,
+
+      // (Specific) Server (Node.js/Express) ESLint Rules
+      ...ESLINT_RULES.SERVER_NODE_EXPRESS_ESLINT_CONFIG_RULES
     }
   }
 ];
