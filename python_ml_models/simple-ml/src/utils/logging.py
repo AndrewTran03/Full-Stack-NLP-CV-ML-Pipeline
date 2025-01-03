@@ -16,7 +16,7 @@ logging_file_handler = logging.FileHandler(LOG_FILE_NAME)
 
 # Define the colored formatter for stdout
 colorlog_formatter = ColoredFormatter(
-    "%(log_color)s[%(asctime)s] LN#%(lineno)-4d: %(levelname)-8s - %(message)s",
+    fmt="%(log_color)s[%(asctime)s] LN#%(lineno)-4d: %(levelname)-8s - %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
     log_colors={
         "DEBUG": "cyan",  # Matches Pino's debug color
