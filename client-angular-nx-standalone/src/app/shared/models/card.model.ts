@@ -15,3 +15,13 @@ export class Card {
     return JSON.stringify(this);
   }
 }
+
+export type Card2 = {
+  id: number;
+  text: string;
+};
+
+export const DEFAULT_CARD: Card2 = {
+  id: 0,
+  text: ""
+};

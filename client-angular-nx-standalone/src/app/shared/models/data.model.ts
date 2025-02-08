@@ -15,7 +15,7 @@ export class Data {
     return jsonArray.map((dataUnmapped) => Data.asData(dataUnmapped));
   }
 
-  json(): string {
-    return JSON.stringify(this);
-  }
+  // json(): string {
+  //   return JSON.stringify(this);
+  // }
 }
