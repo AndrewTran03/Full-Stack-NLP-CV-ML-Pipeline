@@ -1,8 +1,10 @@
 const nx = require("@nx/eslint-plugin");
-const eslintPluginUnicorn = require("eslint-plugin-unicorn");
+const eslintUnicornPlugin = require("eslint-plugin-unicorn");
 const globals = require("globals");
 const tseslint = require("typescript-eslint");
 const ESLINT_RULES = require("@andrewt03/eslint-typescript-rules");
+const eslintSimpleImportSortPlugin = require("eslint-plugin-simple-import-sort");
+const eslintImportPlugin = require("eslint-plugin-import");
 
 module.exports = [
   ...nx.configs["flat/base"],
@@ -29,19 +31,28 @@ module.exports = [
       }
     },
     plugins: {
-      unicorn: eslintPluginUnicorn,
-      "@typescript-eslint": tseslint.plugin
+      unicorn: eslintUnicornPlugin,
+      "@typescript-eslint": tseslint.plugin,
+      "simple-import-sort": eslintSimpleImportSortPlugin,
+      import: eslintImportPlugin
     },
     rules: {
-      // NX-Angular Eslint Rules
-      "@angular-eslint/directive-selector": [
-        "error",
-        {
-          type: "attribute",
-          prefix: "app",
-          style: "camelCase"
-        }
-      ],
+      // Standard ESLint Rules
+      ...ESLINT_RULES.STANDARD_ESLINT_CONFIG_RULES,
+
+      // TypeScript ESLint Rules
+      ...ESLINT_RULES.TYPESCRIPT_ESLINT_CONFIG_RULES,
+
+      // Unicorn ESLint Rules
+      ...ESLINT_RULES.UNICORN_ESLINT_CONFIG_RULES,
+
+      // ESLint Rules: Console/Debugger to "Warn"
+      ...ESLINT_RULES.CONSOLE_DEBUGGER_WARN_ESLINT_CONFIG_RULES,
+
+      // ESLint Rules: Sorting Imports
+      ...ESLINT_RULES.SORT_IMPORT_ESLINT_CONFIG_RULES,
+
+      // ESLint Rules: Angular
       "@angular-eslint/component-selector": [
         "warn",
         {
@@ -50,15 +61,15 @@ module.exports = [
           style: "kebab-case"
         }
       ],
-
-      // Standard ESLint Rules
-      ...ESLINT_RULES.STANDARD_ESLINT_CONFIG_RULES,
-
-      // TypeScript ESLint Rules
-      ...ESLINT_RULES.TYPESCRIPT_ESLINT_CONFIG_RULES,
-
-      // Unicorn ESLint Rules
-      ...ESLINT_RULES.UNICORN_ESLINT_CONFIG_RULES
+      "@angular-eslint/directive-selector": [
+        "warn",
+        {
+          type: "attribute",
+          prefix: "app",
+          style: "camelCase"
+        }
+      ],
+      ...ESLINT_RULES.ANGULAR_ESLINT_CONFIG_RULES
     }
   },
   {
