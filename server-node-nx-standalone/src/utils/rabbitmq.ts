@@ -1,6 +1,7 @@
 import amqp from "amqplib";
-import LOGGER from "./logger";
 import assert from "assert";
+
+import LOGGER from "./logger";
 
 // Default Timeout for RabbitMQ Operations
 const RABBITMQ_TIMEOUT_TIME_SEC = 30;
@@ -32,18 +33,33 @@ export async function startRabbitMQConnection(
   rabbitmq_url: string
 ): Promise<amqp.Connection> {
   assert(rabbitmq_url.length > 0, "RabbitMQ URL should not be empty");
-  try {
-    // Setup RabbitMQ connection
-    const connection = await amqp.connect(rabbitmq_url);
+  return new Promise((resolve, reject) => {
+    try {
+      // Setup RabbitMQ connection
+      const connection = amqp.connect(rabbitmq_url);
 
-    LOGGER.info("Connection created successfully.");
-    return connection;
-  } catch (err) {
-    LOGGER.error(
-      `Error: Failed to start RabbitMQ connection properly. Full Error Message - ${err}`
-    );
-    process.exit(1);
-  }
+      LOGGER.info("RabbitMQ Connection created successfully.");
+      resolve(connection);
+    } catch (error) {
+      const err = error as Error;
+      LOGGER.error(
+        `Error: Failed to start RabbitMQ connection properly. Full Error Message - ${err}`
+      );
+      reject(err);
+    }
+  });
+  // try {
+  //   // Setup RabbitMQ connection
+  //   const connection = await amqp.connect(rabbitmq_url);
+
+  //   LOGGER.info("Connection created successfully.");
+  //   return connection;
+  // } catch (err) {
+  //   LOGGER.error(
+  //     `Error: Failed to start RabbitMQ connection properly. Full Error Message - ${err}`
+  //   );
+  //   process.exit(1);
+  // }
 }
 
 export async function createRabbitMQReqResChannel(
