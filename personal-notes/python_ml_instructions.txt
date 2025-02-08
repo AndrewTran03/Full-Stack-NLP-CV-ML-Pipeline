@@ -1,1 +1,6 @@
 Interpreter: ./python_ml_models/simple-ml/py3_simple_ml/bin/python
+
+- Instructions:
+[1] Python: Select Interpreter > Enter interpreter path...
+[2] Jupyter: Select Interpreter to Start Jupyter Server (Should Pop Up)
+[3] Click on top-right of Jupyter Notebook > Python Enviornments > Select Your Py3-Venv Directory Name
