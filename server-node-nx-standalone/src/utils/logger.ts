@@ -1,8 +1,7 @@
-import pino, { Logger } from "pino";
 import dayjs from "dayjs";
-import path from "path";
 import fs from "fs";
-import SonicBoom from "sonic-boom";
+import path from "path";
+import { Logger, pino } from "pino";
 
 const level = "trace"; // Or through "config" # TODO: Later
 
@@ -32,21 +31,6 @@ increasing order of severity, are:
 - error: Indicates errors that the application can recover from.
 - fatal: Represents critical errors that lead to the termination of the application.
 */
-const pinoFileStream = pino.transport({
-  target: "pino/file",
-  options: {
-    destination: CURR_LOG_FILE
-  }
-});
-const pinoConsoleStream = pino.transport({
-  target: "pino-pretty",
-  options: {
-    colorize: true,
-    translateTime: "yyyy-mm-dd HH:MM:ss",
-    ignore: "pid,hostname"
-  }
-});
-
 const LEVEL_STRINGS = {
   10: "TRACE",
   20: "DEBUG",
@@ -56,47 +40,37 @@ const LEVEL_STRINGS = {
   60: "FATAL"
 } as const;
 
-type LoggerStream = {
-  stream: SonicBoom;
-};
-
-const PINO_LOGGER_STREAMS: LoggerStream[] = [
-  { stream: pinoFileStream },
-  { stream: pinoConsoleStream }
-];
-
-// Function to extract line number from the stack trace
-function getLineNumber(): string {
-  const stackLine = new Error().stack?.split("\n")[3] ?? ""; // Adjust index if needed
-  const match = stackLine.match(/:(\d+):\d+\)$/);
-  return match ? match[1] : "<UNKNOWN>";
-}
-
 type LevelKey = keyof typeof LEVEL_STRINGS;
 
-const LOGGER: Logger = pino(
-  {
-    level: level, // Minimum level to log
-    base: null, // Remove default fields like pid and hostname
-    timestamp: false, // Disable timestamp (as it is already included below)
-    formatters: {
-      level(_, number) {
-        return { level: LEVEL_STRINGS[number as LevelKey] };
-      }
-    },
-    hooks: {
-      logMethod(inputArgs, method, level) {
-        const [msg, ...args] = inputArgs;
-        const lineNumber = getLineNumber();
-        const levelString = LEVEL_STRINGS[level as LevelKey];
-        const enhancedMessage = `[${dayjs().format(
-          "YYYY-MM-DD HH:mm:ss"
-        )}] LN#${lineNumber}: ${levelString} - ${msg}`;
-        return method.apply(this, [enhancedMessage, ...args]);
-      }
-    }
+const LOGGER: Logger = pino({
+  level: level,
+  mixin(_context, level) {
+    return { severity: LEVEL_STRINGS[level as LevelKey] };
   },
-  pino.multistream(PINO_LOGGER_STREAMS) // Use multiple streams: Console and File
-);
+  transport: {
+    targets: [
+      {
+        level: level,
+        target: "pino/file",
+        options: {
+          destination: CURR_LOG_FILE,
+          translateTime: "yyyy-mm-dd HH:MM:ss",
+          ignore: "pid,hostname"
+        }
+      },
+      {
+        level: level,
+        target: "pino-pretty",
+        options: {
+          colorize: true,
+          translateTime: "yyyy-mm-dd HH:MM:ss",
+          ignore: "pid,hostname,severity"
+        }
+      }
+    ]
+  },
+  base: null,
+  timestamp: () => `, "time":"${dayjs().format()}"`
+});
 
 export default LOGGER;
