@@ -1,11 +1,12 @@
 import express from "express";
+
+import LOGGER from "../utils/logger";
 import {
   getQueryParamStatus,
   HTTP_STATUS_CODE,
   onErrorMsg,
   onSuccessMsg
 } from "./utils";
-import LOGGER from "../utils/logger";
 
 const router = express.Router();
 
@@ -48,7 +49,7 @@ export type Prettify<T> = {
 } & {};
 
 router.get("/api/data", (req, res) => {
-  let dataArrFiltered: Data[] = dataArr;
+  let dataArrFiltered = dataArr;
   LOGGER.debug(JSON.stringify(req.query));
 
   // Possible Regex: /api/data?queryParamAge={age}&queryParamName={name}
