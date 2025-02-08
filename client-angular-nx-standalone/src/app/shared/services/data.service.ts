@@ -1,5 +1,5 @@
 import { catchError, map, Observable } from "rxjs";
-import { APIService } from ".";
+import { APIService } from "./api.service";
 import { Data } from "../models/data.model";
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
@@ -11,21 +11,27 @@ export class DataService {
   constructor(private readonly apiService: APIService) {}
 
   getQueriedData(queryParams: { age: number; name: string }): Observable<Data[]> {
+    // return this.apiService
+    //   .get<Data[]>(`api/data?queryParamAge=${queryParams.age}&queryParamName=${queryParams.name}`)
+    //   .pipe(
+    //     map((res) => {
+    //       console.log("Response (Queried):");
+    //       console.log(res);
+    //       return res.response;
+    //     }),
+    //     map((res) => Data.asDatas(res)),
+    //     catchError((errMsg) => {
+    //       const err = errMsg as HttpErrorResponse as { error: { message: string } };
+    //       console.error("ERROR MSG -", err.error.message);
+    //       alert(err.error.message);
+    //       throw err;
+    //     })
+    //   );
     return this.apiService
       .get<Data[]>(`api/data?queryParamAge=${queryParams.age}&queryParamName=${queryParams.name}`)
       .pipe(
-        map((res) => {
-          console.log("Response (Queried):");
-          console.log(res);
-          return res.response;
-        }),
-        map((res) => Data.asDatas(res)),
-        catchError((errMsg) => {
-          const err = errMsg as HttpErrorResponse as { error: { message: string } };
-          console.error("ERROR MSG -", err.error.message);
-          alert(err.error.message);
-          throw err;
-        })
+        map((res) => res.response),
+        map((responses) => responses.map((response) => ({ ...response, createdAt: new Date(response.createdAt) })))
       );
   }
 

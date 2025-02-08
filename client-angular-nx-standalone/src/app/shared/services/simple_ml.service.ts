@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, map, catchError } from "rxjs";
-import { APIService } from ".";
+import { APIService } from "./api.service";
 import { SimpleML } from "../models/simple_ml.model";
 
 @Injectable({

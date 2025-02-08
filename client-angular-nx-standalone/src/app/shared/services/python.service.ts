@@ -2,7 +2,7 @@ import { map, Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { PythonBE } from "../models/python.model";
 import { Injectable } from "@angular/core";
-import { APIService } from ".";
+import { APIService } from "./api.service";
 import { HttpErrorResponse } from "@angular/common/http";
 
 @Injectable({

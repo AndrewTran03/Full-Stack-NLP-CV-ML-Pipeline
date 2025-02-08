@@ -1,10 +1,14 @@
 import { Component, Input, OnDestroy, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { Card } from "../../shared/models/card.model";
+import { Card, Card2, DEFAULT_CARD } from "../../shared/models/card.model";
 import { CardService } from "../../shared/services/card.service";
 import { PythonBE } from "../../shared/models/python.model";
 import { PythonService } from "../../shared/services/python.service";
 import { Subscription } from "rxjs";
+
+// const isVariable = false;
+// const variable = true;
+
 @Component({
   selector: "app-card",
   imports: [CommonModule],
@@ -15,6 +19,16 @@ export class CardComponent implements OnDestroy {
   @Input() input = "";
   private readonly subscriptions: Subscription[] = [];
   card = signal<Card>(new Card());
+  card2 = signal<Card2>(DEFAULT_CARD);
+  // private readonly isCorrect = false;
+  // private readonly correct = false;
+
+  updateCard() {
+    const subscription = this.cardService.getNewCard2().subscribe((newCard: Card2) => {
+      this.card2.set(newCard);
+    });
+    this.subscriptions.push(subscription);
+  }
   predict = signal<PythonBE>(new PythonBE());
 
   constructor(
