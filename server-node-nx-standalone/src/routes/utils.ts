@@ -1,4 +1,6 @@
+import { Response } from "express";
 import QueryString from "qs";
+
 import LOGGER from "../utils/logger";
 
 /* HTTP Status Codes */
@@ -14,6 +16,8 @@ export const HTTP_STATUS_CODE = {
   UNPROCESSABLE_CONTENT: 422,
   INTERNAL_SERVER_ERROR: 500
 } as const;
+type HTTPStatusCodeKeys = keyof typeof HTTP_STATUS_CODE;
+type HTTPStatusCodeValues = (typeof HTTP_STATUS_CODE)[HTTPStatusCodeKeys];
 
 type SuccessMessage<T> = {
   response: T;
@@ -35,6 +39,40 @@ type ErrMessage = {
  */
 export function onErrorMsg(errMsg: string): ErrMessage {
   return { error: new Error(errMsg).message };
+}
+
+export type ExpressResFieldsReturnStatus<T = string> = {
+  status: HTTPStatusCodeValues;
+  message: T | string;
+};
+
+/**
+ * Generates a default state Express Response object.
+ */
+export function getDefaultExpressReturnStatus<
+  T = string
+>(): ExpressResFieldsReturnStatus<T> {
+  return {
+    status: HTTP_STATUS_CODE.OK,
+    message: ""
+  };
+}
+
+/**
+ *  Returns a formatted Express Response object (handling both
+ *  success and error cases appropriately).
+ */
+export function createExpressResponse<T = string>(
+  res: Response,
+  returnStatus: ExpressResFieldsReturnStatus<T>
+): Response {
+  const responseStatus = returnStatus.status.toString();
+  const jsonResponse =
+    responseStatus.startsWith("4") || responseStatus.startsWith("5")
+      ? onErrorMsg(returnStatus.message as string)
+      : onSuccessMsg(returnStatus.message);
+
+  return res.status(returnStatus.status).json(jsonResponse);
 }
 
 export type QUERY_PARAM_STATE =
