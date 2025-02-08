@@ -1,14 +1,15 @@
 import express from "express";
-import { HTTP_STATUS_CODE, onErrorMsg, onSuccessMsg } from "./utils";
+
+import { RABBITMQ_CONNECTION } from "../main";
 import LOGGER from "../utils/logger";
 import {
-  RABBITMQ_TIMEOUT_TIME_MS,
   checkChannelQueuesStatus,
   createRabbitMQReqResChannel,
   generateCorrelationIDRabbitMQ,
   generateReqAndResQueueStrings
+  // RABBITMQ_TIMEOUT_TIME_MS
 } from "../utils/rabbitmq";
-import { RABBITMQ_CONNECTION } from "../main";
+import { HTTP_STATUS_CODE, onErrorMsg, onSuccessMsg } from "./utils";
 
 const CHANNEL_PREFIX = "simple_ml" as const;
 const { REQUEST_QUEUE_STR, RESPONSE_QUEUE_STR } =
@@ -50,19 +51,19 @@ router.post("/api/simple-ml", async (req, res) => {
     // Listen for the response from the Response Queue
     const response = await new Promise<string>((resolve, reject) => {
       // Fallback for too long of a response time
-      const timeout = setTimeout(() => {
-        LOGGER.error(
-          `Timeout: No response received for correlationId: ${correlationId}`
-        );
-        basicPythonChannel.close();
-        throw new Error("Timeout: No response received from Python");
-      }, RABBITMQ_TIMEOUT_TIME_MS);
+      // const timeout = setTimeout(() => {
+      //   LOGGER.error(
+      //     `Timeout: No response received for correlationId: ${correlationId}`
+      //   );
+      //   basicPythonChannel.close();
+      //   throw new Error("Timeout: No response received from Python");
+      // }, RABBITMQ_TIMEOUT_TIME_MS);
 
       basicPythonChannel.consume(
         RESPONSE_QUEUE_STR,
         (message) => {
           if (message == null) {
-            clearTimeout(timeout);
+            // clearTimeout(timeout);
             basicPythonChannel.close();
             reject(new Error("Invalid Response from Python"));
             return;
@@ -75,7 +76,7 @@ router.post("/api/simple-ml", async (req, res) => {
           });
 
           if (message.content.length === 0) {
-            clearTimeout(timeout);
+            // clearTimeout(timeout);
             basicPythonChannel.close();
             reject(new Error("Empty Response from Python"));
             return;
@@ -87,7 +88,7 @@ router.post("/api/simple-ml", async (req, res) => {
               `Python Response Message Content: ${message.content.toString()}`
             );
 
-            clearTimeout(timeout);
+            // clearTimeout(timeout);
             // Acknowledge the message from RabbitMQ
             basicPythonChannel.ack(message);
 
