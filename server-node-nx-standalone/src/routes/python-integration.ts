@@ -1,14 +1,15 @@
 import express from "express";
-import { HTTP_STATUS_CODE, onErrorMsg, onSuccessMsg } from "./utils";
+
+import { RABBITMQ_CONNECTION } from "../main";
 import LOGGER from "../utils/logger";
 import {
-  RABBITMQ_TIMEOUT_TIME_MS,
   checkChannelQueuesStatus,
   createRabbitMQReqResChannel,
   generateCorrelationIDRabbitMQ,
-  generateReqAndResQueueStrings
+  generateReqAndResQueueStrings,
+  RABBITMQ_TIMEOUT_TIME_MS
 } from "../utils/rabbitmq";
-import { RABBITMQ_CONNECTION } from "../main";
+import { HTTP_STATUS_CODE, onErrorMsg, onSuccessMsg } from "./utils";
 
 const CHANNEL_PREFIX = "python" as const;
 const { REQUEST_QUEUE_STR, RESPONSE_QUEUE_STR } =
