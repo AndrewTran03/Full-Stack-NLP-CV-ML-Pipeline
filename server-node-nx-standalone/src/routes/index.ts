@@ -1,8 +1,9 @@
 import express from "express";
-import { HTTP_STATUS_CODE, onErrorMsg, onSuccessMsg } from "./utils";
-import { PYTHON_INTEGRATION_ROUTER } from "./python-integration";
+
 import { DATA_ROUTER } from "./data";
+import { PYTHON_INTEGRATION_ROUTER } from "./python-integration";
 import { SIMPLE_ML_ROUTER } from "./simple-ml";
+import { HTTP_STATUS_CODE, onErrorMsg, onSuccessMsg } from "./utils";
 
 const APP_ROUTER = express.Router();
 APP_ROUTER.use(DATA_ROUTER);
