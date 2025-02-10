@@ -5,3 +5,7 @@ export type AppConfig = {
   frontendClientUrl: string;
   loglevel: string;
 };
+
+export function parseBool(value: string): boolean {
+  return value === "true";
+}

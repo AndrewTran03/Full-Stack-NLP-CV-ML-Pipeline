@@ -1,4 +1,4 @@
-import { AppConfig } from "./types";
+import { AppConfig, parseBool } from "./types";
 
 console.log(process.env["NODE_ENV"]);
 console.log(process.env["BACKEND_PORT"]);
@@ -12,5 +12,7 @@ const config: AppConfig = {
   frontendClientUrl: `http://localhost:${process.env.FRONTEND_PORT}`,
   loglevel: "trace"
 };
+
+console.log(parseBool("true"));
 
 export default config;
