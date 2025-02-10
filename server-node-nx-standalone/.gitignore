@@ -43,3 +43,7 @@ Thumbs.db
 
 # Logging Files
 logs/
+
+# Enviornment files
+.env*
+!.env.sample
