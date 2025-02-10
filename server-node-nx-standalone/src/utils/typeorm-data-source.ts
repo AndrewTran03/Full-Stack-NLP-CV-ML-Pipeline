@@ -2,6 +2,15 @@ import { DataSource } from "typeorm";
 
 import { ENTITIES } from "../db-entity";
 import { MIGRATIONS } from "../db-migration";
+import LOGGER from "./logger";
+
+LOGGER.warn(process.cwd());
+
+let sqliteDBPath = "./src/db/database.sqlite";
+if (process.env["NODE_ENV"] === "production") {
+  sqliteDBPath = `./dist/server-node-nx-standalone/${sqliteDBPath.replace("./", "")}`;
+}
+LOGGER.warn(`sqliteDBPath: ${sqliteDBPath}`);
 
 /**
  * DataSource for TypeORM.
@@ -12,7 +21,7 @@ import { MIGRATIONS } from "../db-migration";
  */
 export const AppDataSourceTypeORM = new DataSource({
   type: "sqlite",
-  database: "./src/db/database.sqlite",
+  database: sqliteDBPath,
   synchronize: false,
   logging: true,
   entities: ENTITIES,
